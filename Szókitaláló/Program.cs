@@ -10,6 +10,47 @@ namespace Szókitaláló
     {
         static void Main(string[] args)
         {
+            string[] szavak = { "Első", "Alma", "Vizibicikli", "Ferenc", "Torony" };
+            int probalkozas = 10;
+            Random rnd = new Random();
+            string kitalalando = szavak[rnd.Next(szavak.Length)];
+            kitalalando = kitalalando.ToLower();
+            string modositottkitalalando = kitalalando;
+            Console.WriteLine(kitalalando);
+            int kitalaltbetukszam = 0;
+            char[] kitalaltbetuk = new char[kitalalando.Length];
+            do
+            {
+                Console.WriteLine($"A szó hossza: {kitalalando.Length}db betü");
+                Console.WriteLine($"Eddig kitalált betük: {kitalaltbetuk} ");
+                Console.Write("Tippeljen egy betüt: ");
+                char betu = Convert.ToChar(Console.ReadLine());
+                if (modositottkitalalando.Contains(betu))
+                {
+                    for (int i = 0; i < modositottkitalalando.Length; i++)
+                    {
+                        if (modositottkitalalando[i] == betu)
+                        {
+                            kitalaltbetukszam++;
+                            kitalaltbetuk.Append(betu);
+                            modositottkitalalando = modositottkitalalando.Remove(modositottkitalalando.IndexOf(betu), 1);
+                        }
+                    }
+                    ;
+                    Console.WriteLine($"A szóban van {betu} betü.");
+                }
+                else
+                {
+                    probalkozas--;
+                    Console.WriteLine($"Nincs benne a szóban a {betu} betü. Maradt {probalkozas} probalkozas.");
+                }
+                if (kitalaltbetukszam == kitalalando.Length)
+                {
+                    Console.WriteLine($"Kitaláltad a szót ami {kitalalando} volt.");
+                    break;
+                }
+                Console.WriteLine(modositottkitalalando);
+            } while (probalkozas > 0);
         }
     }
 }

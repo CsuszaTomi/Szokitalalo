@@ -1,0 +1,6 @@
+Véletlen számok a Random osztály segítségével generálhatók
+Random.Next() a függvény, ami a véletlenszámot elõállítják
+3 féle használata van:
+-paraméter nélkül bármilyen nem negatív int típusu egész kijöhet
+-egy paraméter esetén az adott számtól kisebb nem negatív int jöhet ki
+-kettõ paraméter esetén az alsó értéktõl nagyobb, egyenlõ, a felsõ értéktõl kisseb
