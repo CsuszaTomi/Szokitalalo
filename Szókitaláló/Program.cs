@@ -131,7 +131,9 @@
                             }
                         }
                         modositottkitalalando = modositottkitalalando.Replace(betu, '*');
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine($"A szóban van {betu} betü.");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                     else
                     {
@@ -142,7 +144,12 @@
                     }
                     if (kitalaltbetukszam == kitalalando.Length)
                     {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine($"Kitaláltad a szót ami {kitalalando} volt.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine("Enterre tovább.....");
+                        Console.ReadLine();
                         break;
                     }
                 } while (probalkozas > 0);
