@@ -1,68 +1,210 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
 
-namespace Szókitaláló
-{
-    internal class Program
+    namespace Szókitaláló
     {
-        static void Main(string[] args)
+        internal class Program
         {
-            string[] szavak = { "Első", "Alma", "Vizibicikli", "Ferenc", "Torony", };
-            int probalkozas = 10;
-            Random rnd = new Random();
-            string kitalalando = szavak[rnd.Next(szavak.Length)];
-            kitalalando = kitalalando.ToLower();
-            string modositottkitalalando = kitalalando;
-            int kitalaltbetukszam = 0;
-            char[] talalatok = new char[kitalalando.Length];
-            for (int i = 0; i < talalatok.Length; i++)
+            static void Main(string[] args)
             {
-                talalatok[i] = '_';
-            }
-            do
-            {
-                Console.WriteLine($"A szó hossza: {kitalalando.Length}db betü");
-                Console.WriteLine(talalatok);
-                Console.Write("Tippeljen egy betüt: ");
-                string betustring = Console.ReadLine();
-                betustring = betustring.ToLower().Trim();
-                if (betustring.Length > 1)
+                int probalkozas, kitalaltbetukszam;
+                string kitalalando, modositottkitalalando;
+                char[] eltalaltbetuk;
+                int currentPoint = 0;
+                do
                 {
+                    bool selected = false;
                     do
                     {
-                        Console.Write("Nem adott meg csak egy betüt. Kérem adjon meg egy betüt: ");
-                        betustring = Console.ReadLine();
-                        betustring = betustring.ToLower().Trim();
-                    } while (betustring.Length > 1);
-                }
-                char betu = Convert.ToChar(betustring);
-                if (modositottkitalalando.Contains(betu))
-                {
-                    for (int i = 0; i < modositottkitalalando.Length; i++)
-                    {
-                        if (modositottkitalalando[i] == betu)
+                        ShowMenu(currentPoint);
+                        switch (Console.ReadKey().Key)
                         {
-                            kitalaltbetukszam++;
-                            talalatok[i] = betu;
+                            case ConsoleKey.Enter:
+                                selected = true;
+                                break;
+
+                            case ConsoleKey.UpArrow:
+                                if (currentPoint > 0)
+                                    currentPoint--;
+                                break;
+                            case ConsoleKey.DownArrow:
+                                if (currentPoint < 2)
+                                    currentPoint++;
+                                break;
+
+                            default:
+                                Console.Beep();
+                                break;
                         }
+                    } while (!selected);
+                    switch (currentPoint)
+                    {
+                        case 0:     //Játék kezdése
+                            Console.Clear();
+                            Alapadatok(out probalkozas, out kitalalando, out modositottkitalalando, out kitalaltbetukszam, out eltalaltbetuk);
+                            Játék(ref probalkozas, ref kitalaltbetukszam, kitalalando, ref modositottkitalalando, eltalaltbetuk);
+                            break;
+                        case 1: //szín beállítások menü
+                            HáttérszínÁllító(currentPoint);
+                            break;
+                        case 2:     //kilepes
+                            Console.Clear();
+                            Console.Write("Biztosan ki szeretnél lépni?(i/n): ");
+                            if (Console.ReadKey().Key != ConsoleKey.I)
+                                currentPoint = 0;
+                            break;
                     }
-                    modositottkitalalando = modositottkitalalando.Replace(betu, '*');
-                    Console.WriteLine($"A szóban van {betu} betü.");
+                } while (currentPoint != 2);
+            
+            }
+
+            private static void HáttérszínÁllító(int currentPoint)
+            {
+                Console.Clear();
+                int valasztas = 0;
+                Console.WriteLine("Milyen legyen a háttér színe?");
+                Console.WriteLine("1. Fekete");
+                Console.WriteLine("2. Kék");
+                Console.WriteLine("3. Zöld");
+                Console.WriteLine("4. Cián");
+                Console.WriteLine("5. Piros");
+                do
+                {
+                    Console.Write("Választás: ");
+                } while (!int.TryParse(Console.ReadLine(), out valasztas));
+                switch (valasztas)
+                {
+                    case 1:
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        break;
+                    case 2:
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        break;
+                    case 3:
+                        Console.BackgroundColor = ConsoleColor.DarkGreen;
+                        break;
+                    case 4:
+                        Console.BackgroundColor = ConsoleColor.Cyan;
+                        break;
+                    case 5:
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        break;
+                    default:
+                        Console.Beep();
+                        break;
+                }
+                currentPoint = 0;
+            }
+
+            private static void Játék(ref int probalkozas, ref int kitalaltbetukszam, string kitalalando, ref string modositottkitalalando, char[] eltalaltbetuk)
+            {
+                do
+                {
+                    Console.WriteLine($"A szó hossza: {kitalalando.Length}db betü");
+                    Console.WriteLine(eltalaltbetuk);
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("Tippeljen egy betüt: ");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    string betustring = Console.ReadLine();
+                    betustring = betustring.ToLower().Trim();
+                    if (betustring.Length != 1)
+                    {
+                        do
+                        {
+                            Console.Write("Nem adott meg csak egy betüt. Kérem adjon meg egy betüt: ");
+                            betustring = Console.ReadLine();
+                            betustring = betustring.ToLower().Trim();
+                        } while (betustring.Length != 1);
+                    }
+                    char betu = Convert.ToChar(betustring);
+                    if (modositottkitalalando.Contains(betu))
+                    {
+                        for (int i = 0; i < modositottkitalalando.Length; i++)
+                        {
+                            if (modositottkitalalando[i] == betu)
+                            {
+                                kitalaltbetukszam++;
+                                eltalaltbetuk[i] = betu;
+                            }
+                        }
+                        modositottkitalalando = modositottkitalalando.Replace(betu, '*');
+                        Console.WriteLine($"A szóban van {betu} betü.");
+                    }
+                    else
+                    {
+                        probalkozas--;
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Nincs benne a szóban a {betu} betü. Maradt {probalkozas} probalkozas.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    if (kitalaltbetukszam == kitalalando.Length)
+                    {
+                        Console.WriteLine($"Kitaláltad a szót ami {kitalalando} volt.");
+                        break;
+                    }
+                } while (probalkozas > 0);
+                if (probalkozas < 1)
+                {
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"Elfogytak a próbálkozásaid, a kitalálandó szó a {kitalalando} volt.");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("Enterre tovább.....");
+                    Console.ReadLine();
+                }
+            }
+
+            private static void Alapadatok(out int probalkozas, out string kitalalando, out string modositottkitalalando, out int kitalaltbetukszam, out char[] eltalaltbetuk)
+            {
+                string[] szavak = { "Első", "Alma", "Vizibicikli", "Ferenc", "Torony", "Szomszéd", "Bánya", "Hegy", "Kolbász", "Ló", "Ház", "Város", "Dél", "Ország", "Nemzet", "Béke", "Háború", "Gépjármű", "Autó", "Busz", "Barack", "Fa", "Krumpli", "Hagyma", "Fehér", "Fekete", "Repülő", "Kastély", "Vár", "eltöredezettségmentesítőtleníttethetetlenségtelenítőtlenkedhetnétek" };
+                probalkozas = 10;
+                Random rnd = new Random();
+                kitalalando = szavak[rnd.Next(szavak.Length)];
+                kitalalando = kitalalando.ToLower();
+                modositottkitalalando = kitalalando;
+                kitalaltbetukszam = 0;
+                eltalaltbetuk = new char[kitalalando.Length];
+                for (int i = 0; i < eltalaltbetuk.Length; i++)
+                {
+                    eltalaltbetuk[i] = '_';
+                }
+            }
+
+            static void ShowMenu(int cPoint)
+            {
+                Console.Clear();
+                Console.WriteLine("*** SZÓKITALÁLÓ ***");
+                if (cPoint == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
                 }
                 else
                 {
-                    probalkozas--;
-                    Console.WriteLine($"Nincs benne a szóban a {betu} betü. Maradt {probalkozas} probalkozas.");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
-                if (kitalaltbetukszam == kitalalando.Length)
+                Console.WriteLine("Start");
+                if (cPoint == 1)
                 {
-                    Console.WriteLine($"Kitaláltad a szót ami {kitalalando} volt.");
-                    break;
+                    Console.ForegroundColor = ConsoleColor.Blue;
                 }
-            } while (probalkozas > 0);
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                Console.WriteLine("Háttérszín állítás");
+                if (cPoint == 2)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                Console.WriteLine("Kilépés");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
         }
     }
-}
