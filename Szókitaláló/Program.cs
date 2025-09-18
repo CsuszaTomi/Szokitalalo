@@ -18,11 +18,15 @@ namespace Szókitaláló
             string modositottkitalalando = kitalalando;
             Console.WriteLine(kitalalando);
             int kitalaltbetukszam = 0;
-            char[] kitalaltbetuk = new char[kitalalando.Length];
+            char[] talalatok = new char[kitalalando.Length];
+            for (int i = 0; i < talalatok.Length; i++)
+            {
+                talalatok[i] = '_';
+            }
             do
             {
                 Console.WriteLine($"A szó hossza: {kitalalando.Length}db betü");
-                Console.WriteLine($"Eddig kitalált betük: {kitalaltbetuk} ");
+                Console.WriteLine(talalatok);
                 Console.Write("Tippeljen egy betüt: ");
                 char betu = Convert.ToChar(Console.ReadLine());
                 if (modositottkitalalando.Contains(betu))
@@ -32,11 +36,10 @@ namespace Szókitaláló
                         if (modositottkitalalando[i] == betu)
                         {
                             kitalaltbetukszam++;
-                            kitalaltbetuk.Append(betu);
-                            modositottkitalalando = modositottkitalalando.Remove(modositottkitalalando.IndexOf(betu), 1);
+                            talalatok[i] = betu;
                         }
                     }
-                    ;
+                    modositottkitalalando = modositottkitalalando.Replace(betu, '*');
                     Console.WriteLine($"A szóban van {betu} betü.");
                 }
                 else
