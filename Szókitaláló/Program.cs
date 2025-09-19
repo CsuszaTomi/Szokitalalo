@@ -13,6 +13,7 @@
                 int probalkozas, kitalaltbetukszam;
                 string kitalalando, modositottkitalalando;
                 char[] eltalaltbetuk;
+                char[] eddigibetuk;
                 int currentPoint = 0;
                 do
                 {
@@ -44,8 +45,8 @@
                     {
                         case 0:     //Játék kezdése
                             Console.Clear();
-                            Alapadatok(out probalkozas, out kitalalando, out modositottkitalalando, out kitalaltbetukszam, out eltalaltbetuk);
-                            Játék(ref probalkozas, ref kitalaltbetukszam, kitalalando, ref modositottkitalalando, eltalaltbetuk);
+                            Alapadatok(out probalkozas, out kitalalando, out modositottkitalalando, out kitalaltbetukszam, out eltalaltbetuk, out eddigibetuk);
+                            Játék(ref probalkozas, ref kitalaltbetukszam, kitalalando, ref modositottkitalalando, eltalaltbetuk, ref eddigibetuk);
                             break;
                         case 1: //szín beállítások menü
                             HáttérszínÁllító(currentPoint);
@@ -99,7 +100,7 @@
                 currentPoint = 0;
             }
 
-            private static void Játék(ref int probalkozas, ref int kitalaltbetukszam, string kitalalando, ref string modositottkitalalando, char[] eltalaltbetuk)
+            private static void Játék(ref int probalkozas, ref int kitalaltbetukszam, string kitalalando, ref string modositottkitalalando, char[] eltalaltbetuk, ref char[] eddigibetuk)
             {
                 do
                 {
@@ -120,6 +121,18 @@
                         } while (betustring.Length != 1);
                     }
                     char betu = Convert.ToChar(betustring);
+                    if (eddigibetuk.Contains(betu))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Ezt a betüt már használta, kérem adjon meg egy másikat.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        continue;
+                    }
+                    else
+                    {
+                        Array.Resize(ref eddigibetuk, eddigibetuk.Length + 1);
+                        eddigibetuk[eddigibetuk.Length - 1] = betu;
+                    }
                     if (modositottkitalalando.Contains(betu))
                     {
                         for (int i = 0; i < modositottkitalalando.Length; i++)
@@ -164,7 +177,7 @@
                 }
             }
 
-            private static void Alapadatok(out int probalkozas, out string kitalalando, out string modositottkitalalando, out int kitalaltbetukszam, out char[] eltalaltbetuk)
+            private static void Alapadatok(out int probalkozas, out string kitalalando, out string modositottkitalalando, out int kitalaltbetukszam, out char[] eltalaltbetuk, out char[] eddigibetuk)
             {
                 string[] szavak = { "Első", "Alma", "Vizibicikli", "Ferenc", "Torony", "Szomszéd", "Bánya", "Hegy", "Kolbász", "Ló", "Ház", "Város", "Dél", "Ország", "Nemzet", "Béke", "Háború", "Gépjármű", "Autó", "Busz", "Barack", "Fa", "Krumpli", "Hagyma", "Fehér", "Fekete", "Repülő", "Kastély", "Vár", "eltöredezettségmentesítőtleníttethetetlenségtelenítőtlenkedhetnétek" };
                 probalkozas = 10;
@@ -174,6 +187,7 @@
                 modositottkitalalando = kitalalando;
                 kitalaltbetukszam = 0;
                 eltalaltbetuk = new char[kitalalando.Length];
+                eddigibetuk = new char[0];
                 for (int i = 0; i < eltalaltbetuk.Length; i++)
                 {
                     eltalaltbetuk[i] = '_';
